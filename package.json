@@ -1,0 +1,26 @@
+{
+  "name": "firstexpress",
+  "version": "1.0.0",
+  "description": "Node, Express, Mongo",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "Node",
+    "Express",
+    "Mongo",
+    "Web",
+    "Application"
+  ],
+  "author": "Arpit Jain",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
