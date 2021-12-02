@@ -54,10 +54,8 @@ Extend the express application created in the previous assignment.
 ### User structure
 ```yaml
 {
-    id: number,
+    id: number | required,
     name: string | required,
-    email: string | required,
-    password: string | required,
     phone: string
 }
 ```
