@@ -69,3 +69,36 @@ Extend the express application created in the previous assignment.
     error: if there is an error else null
 }
 ```
+
+## View Setup
+Setup express application for rending views using a view engine.
+```javascript
+const express = require('express')
+const path = require('path')
+const app = express();
+
+// set view engine
+app.set('views', path.join(__dirname, "views"))
+// path.join(__dirname, "views") = path to view files base folder
+app.set('view engine', 'pug');
+/** some common view engine used with expressjs
+ * pug or jade
+ * ejs
+ * haml
+*/
+
+// set static file serving
+app.use(express.static(path.join(__dirname, "public")))
+// path.join(__dirname, "public") = path to static files base folder
+```
+
+### Problem Statement
+Create a static web application with some pages.
+1. Home page route => GET / or/and GET /home
+2. About page route => GET /about
+3. Contact page route => GET /contact
+4. Blogs page route => GET /blogs
+
+Note: 
+- All these pages should have a navigation bar using that a user should be able to route between these pages.
+- Keep some static content on all these pages.
