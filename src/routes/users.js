@@ -7,11 +7,7 @@ router.get(
   middleware,
   (req, res, next) => {
     console.log("First get route handler");
-    return res.json({
-        status: "success",
-        error: null,
-        data: 'User list'
-    });
+    return res.render("users/index");
   }
 );
 
