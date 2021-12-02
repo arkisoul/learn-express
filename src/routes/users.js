@@ -1,22 +1,10 @@
 const express = require("express");
 
 const router = express.Router();
-
+const middleware = (req, res, next) => {console.log('router level middleware'); next()};
 router.get(
   "/",
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
-  (req, res, next) => {},
+  middleware,
   (req, res, next) => {
     console.log("First get route handler");
     return res.json({
@@ -27,7 +15,7 @@ router.get(
   }
 );
 
-router.get("/test-user", (req, res, next) => {
+router.get("/test-user", middleware, (req, res, next) => {
   console.log("Second get route handler");
   return res.json({
     status: "success",
@@ -36,7 +24,7 @@ router.get("/test-user", (req, res, next) => {
   });
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", middleware, (req, res, next) => {
     console.log(req.body, req.params, req.query);
     return res.json({
       status: "success",

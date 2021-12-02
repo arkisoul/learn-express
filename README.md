@@ -16,8 +16,6 @@ To manage different end points/path in the application
     - GET Route "/products" => response = product list
     - POST Route "/products" => response = product created
 
-### Problem Statement 
-
 ## Middleware
 In general = request => route => (n * middleware)? => route handler (method/function) => response
                                     => response
@@ -26,3 +24,19 @@ No middleware = request => route => route handler (method/function) => response
 One middleware = request => route => middleware => route handler (method/function) => response
 Two middleware = request => route => middleware => middleware => route handler (method/function) => response
 Four middleware = request => route => middleware => middleware => middleware => middleware => route handler (method/function) => response
+
+Types of middlewares
+- Based on origin
+    - Custom middleware
+    - Third party middleware
+
+- How we are applying
+    - application middleware
+    - route middleware
+
+body-parser
+cookie-parser
+multer
+morgan
+passport
+
