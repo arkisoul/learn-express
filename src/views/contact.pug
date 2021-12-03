@@ -1,0 +1,26 @@
+extends ./layout/main
+
+block content
+    .container
+        h1 This is Contact Page
+
+        .form-container 
+            form(action="/contact" method="POST") 
+                input(type="hidden", name="_method", value="PUT")
+                .form-group
+                    label(for="userId") User Id
+                    input#userId.form-control(type="text", name="userId")
+                .form-group
+                    label(for="name") Name
+                    input#name.form-control(type="text", name="name")
+                .form-group
+                    label(for="phone") Phone
+                    input#phone.form-control(type="text", name="phone")
+                .form-group
+                    button(type="submit") Submit
+
+        .user-info
+            if user
+                span #{user.userId}
+                span #{user.name}
+                span #{user.phone}

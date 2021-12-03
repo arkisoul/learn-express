@@ -1,0 +1,13 @@
+extends ./layout/main
+
+block content
+    .container
+        h1 This is About Page
+
+        each head in content
+            h2 #{head.text}
+            p #{head.description}
+            
+block footer
+    footer
+        p This is a custom footer for About page
