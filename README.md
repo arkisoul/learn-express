@@ -102,3 +102,38 @@ Create a static web application with some pages.
 Note: 
 - All these pages should have a navigation bar using that a user should be able to route between these pages.
 - Keep some static content on all these pages.
+
+## Authentication & Authorization
+### Authentication
+    Authentication is the process to identify the user. Uses credentials i.e. username and password to validate and identify the user.
+
+### Authorization
+    Authorization is the process to know an authenticated users' access to the system.
+
+## File Handling
+To handle the files that are coming in the request, need to handle multipart/form-data. To parse multipart/form-data, a third-party package is applied. There are serveral packages available for this purpose. We are using multer for our use case.
+
+### Multer
+    ```javascript
+        require("multer")().none()
+        //        or
+        const multer = require("multer")
+        const multerObject = multer()
+        multerObject.none()
+    ```
+    - none => it only parses the text fields in a multipart/form-data request
+        ex: require("multer")().none()
+    - single => it parses a single field with single file as payload
+        ex: require("multer")().single("fieldname")
+    - array => it parses a single field with multiple files as payload
+        ex: require("multer")().array("fieldname", maxCount)
+    - fields => it parses multiple fields with single or multiple files as payload
+        ex: require("multer")().array([{name: "fieldname1", maxCount: 1}, {name: "fieldname12, maxCount: 5}, {name: "fieldname3", maxCount: 1}])
+    - any => it prarses any file fields as well as text fiels
+        ex: require("multer")().any()
+
+file objects are available on the request object as file in case of a single file and as files in case of multiple files.
+```javascript
+    req.file
+    req.files
+```

@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const session = require("express-session");
+const fs = require('fs');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -11,7 +12,6 @@ const routes = require("./routes");
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(multer().none());
 app.use(session({
   resave: true,
   saveUninitialized: false,
@@ -94,11 +94,37 @@ app.get("/about", (req, res, next) => {
 app.get("/contact", (req, res, next) => {
   return res.render("contact", { title: "Express | Contact Page" });
 });
-app.post("/contact", (req, res, next) => {
+
+const upload = multer()
+
+app.post("/contact", upload.single("displayImage"), (req, res, next) => {
   try {
     const user = req.body;
-    req.body.data.name;
-    return res.render("contact", { title: "Express | Contact Page", user: user });
+
+    const isUploadFolderExist = fs.existsSync(
+      path.join(__dirname, "public", "uploads")
+      // /User/Username/Projects/firstexpress/src/public/uploads
+    );
+    if (!isUploadFolderExist) {
+      fs.mkdirSync(path.join(__dirname, "public", "uploads"));
+    }
+
+    fs.writeFile(
+      path.join(__dirname, "public", "uploads", req.file.originalname),
+      req.file.buffer,
+      { encoding: "utf8" },
+      (err) => {
+        if (err) throw err;
+
+        const publicUrl = `${req.protocol}://${req.headers.host}/uploads/${req.file.originalname}`;
+
+        return res.render("contact", {
+          title: "Express | Contact Page",
+          user: user,
+          file: publicUrl
+        });
+      }
+    );
   } catch (error) {
     error.status = 400;
     throw error;
@@ -114,6 +140,14 @@ app.get("/portfolio", (req, res, next) => {
   // throw error;
   return res.render("portfolio", { title: "Express | Portfolio Page" });
 });
+
+app.get("/content", (req, res, next) => {
+  return res.format({
+    json: () => res.json({ title: "Express | Portfolio Page" }),
+    html: () => res.send("<h1>Express | Portfolio Page</h1>"),
+    text: () => res.send("Express | Portfolio Page"),
+  });
+})
 
 app.use(function(req, res, next) {
   // res.locals.message = `The page you are looking for is not found`
