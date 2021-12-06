@@ -1,27 +1,38 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 let users = [];
 
-const validateUserDataMiddleware = (req, res, next) => {
-  if(!req.body.id) return res.json({
-    status: "failure",
-    message: `Id is required`,
-    data: null,
-    error: "Missing id",
-  });
-  if(!req.body.name) return res.json({
-    status: "failure",
-    message: `Name is required`,
-    data: null,
-    error: "Missing name",
-  });
+const validateAuthorization = (req, res, next) => {
+  const authorizationHeader = req.header("authorization");
+  const token = authorizationHeader.split(" ")[1];
+  const decoded = jwt.verify(token, "somesecuredjwtkey");
+  req.userId = decoded.userId;
   next();
-}
+};
+
+const validateUserDataMiddleware = (req, res, next) => {
+  if (!req.body.id)
+    return res.json({
+      status: "failure",
+      message: `Id is required`,
+      data: null,
+      error: "Missing id",
+    });
+  if (!req.body.name)
+    return res.json({
+      status: "failure",
+      message: `Name is required`,
+      data: null,
+      error: "Missing name",
+    });
+  next();
+};
 
 // const middleware = (req, res, next) => {console.log('router level middleware'); next()};
-router.get("/", (req, res, next) => {
-  // console.log("First get route handler");
+router.get("/", validateAuthorization, (req, res, next) => {
+  console.log("First get route handler", req.userId);
   return res.json({
     status: "success",
     message: "Users list",
@@ -63,8 +74,8 @@ router.put("/:userId", validateUserDataMiddleware, (req, res, next) => {
       user = userData;
       userIndex = index;
     }
-  })
-  if(user) {
+  });
+  if (user) {
     user.id = req.body.id;
     user.name = req.body.name;
     user.phone = req.body.phone;
@@ -81,7 +92,7 @@ router.put("/:userId", validateUserDataMiddleware, (req, res, next) => {
       status: "failure",
       message: `No user found`,
       data: null,
-      error: 'Invalid id',
+      error: "Invalid id",
     });
   }
   /* const data = [];
@@ -101,7 +112,9 @@ router.put("/:userId", validateUserDataMiddleware, (req, res, next) => {
 });
 
 router.delete("/:userId", (req, res, next) => {
-  const updatedUsersList = users.filter(user => user.id !== +req.params.userId)
+  const updatedUsersList = users.filter(
+    (user) => user.id !== +req.params.userId
+  );
   users = updatedUsersList;
 
   return res.json({
@@ -110,6 +123,6 @@ router.delete("/:userId", (req, res, next) => {
     data: users,
     error: null,
   });
-})
+});
 
 module.exports = router;

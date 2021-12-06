@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
+const session = require("express-session");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -11,6 +12,15 @@ const routes = require("./routes");
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(multer().none());
+app.use(session({
+  resave: true,
+  saveUninitialized: false,
+  secret: 'somerandomsecurekey',
+  cookie: {
+    maxAge: 2 * 60 * 60 * 1000,
+    secure: false,
+  }
+}))
 // app.use(parseRequestDataMiddleware) // custom middleware
 // set view engine
 app.set("views", path.join(__dirname, 'views'))
@@ -54,9 +64,12 @@ app.use(
 
 app.use("/auth", routes.auth);
 app.get("/", (req, res, next) => {
+  console.log(req.session, req.sessionID);
+  req.session.somekey = 'somevalue';
   return res.render("index", { title: 'Express | Home Page', heading: 'Welcome to Expressjs' });
 });
 app.get("/about", (req, res, next) => {
+  console.log(req.session.somekey);
   return res.render("about", {
     title: "Express | About Page",
     content: [
