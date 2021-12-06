@@ -82,12 +82,42 @@ app.get("/contact", (req, res, next) => {
   return res.render("contact", { title: "Express | Contact Page" });
 });
 app.post("/contact", (req, res, next) => {
-  const user = req.body;
-  return res.render("contact", { title: "Express | Contact Page", user: user });
+  try {
+    const user = req.body;
+    req.body.data.name;
+    return res.render("contact", { title: "Express | Contact Page", user: user });
+  } catch (error) {
+    error.status = 400;
+    throw error;
+  }
 });
 app.get("/portfolio", (req, res, next) => {
+  /**
+   * Simulating an error in route handler
+   * that will be handled by the global error handler middleware
+   */
+  // const error = new Error('Unable to process your request at this moment. Please try again later');
+  // error.status = 400;
+  // throw error;
   return res.render("portfolio", { title: "Express | Portfolio Page" });
 });
+
+app.use(function(req, res, next) {
+  // res.locals.message = `The page you are looking for is not found`
+  // res.locals.error = new Error(`The page you are looking for is not found`);
+  // return res.render('error')
+  const error = new Error(`The page you are looking for is not found`);
+  error.status = 404;
+  return next(error);
+})
+
+app.use(function(err, req, res, next) {
+  res.locals.message = err.message;
+  res.locals.error = err
+
+  res.statusCode = (err.status || 500);
+  return res.render("error");
+})
 
 app.listen(port, () =>
   console.log(`Express server started listening at PORT ${port}`)
