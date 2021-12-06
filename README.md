@@ -137,3 +137,8 @@ file objects are available on the request object as file in case of a single fil
     req.file
     req.files
 ```
+
+## MongoDB - How to connect to mongodb using mongoose?
+mongodb+src://localhost:27017/databasename
+
+## Content negotiation
